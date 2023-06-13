@@ -16,7 +16,7 @@ class CartProvider with ChangeNotifier {
   ///
   /// If the product is already in the cart, the quantity is incremented.
   /// If the product is not in the cart, it is added with a quantity of 1.
-  void addItem(Product product) {
+  void addItem(Product product, int quantity) {
     // Checking if the product is already in the cart
     if (_items.containsKey(product.id)) {
       // If the product is already in the cart, increment the quantity
@@ -24,14 +24,17 @@ class CartProvider with ChangeNotifier {
         product.id,
         (existingCartItem) => CartItem(
           product: existingCartItem.product,
-          quantity: existingCartItem.quantity + 1,
+          quantity: existingCartItem.quantity + quantity,
         ),
       );
     } else {
       // If the product is not in the cart, add it
       _items.putIfAbsent(
         product.id,
-        () => CartItem(product: product),
+        () => CartItem(
+          product: product,
+          quantity: quantity
+        ),
       );
     }
     // Notify all listeners about the update
@@ -62,5 +65,46 @@ class CartProvider with ChangeNotifier {
       total += item.product.price * item.quantity;
     });
     return total;
+  }
+
+  /// Method to increase the quantity of an item in the cart.
+  void incrementItem(Product product) {
+    if (_items.containsKey(product.id)) {
+      // if item already exists in cart, increase the quantity
+      _items.update(
+        product.id,
+            (existingCartItem) => CartItem(
+          product: existingCartItem.product,
+          quantity: existingCartItem.quantity + 1,
+        ),
+      );
+    } else {
+      // if item does not exist in cart, add it
+      _items.putIfAbsent(
+        product.id,
+            () => CartItem(
+          product: product,
+          quantity: 1,
+        ),
+      );
+    }
+    notifyListeners();
+  }
+
+  /// Method to decrease the quantity of an item in the cart.
+  void decrementItem(Product product) {
+    if (_items.containsKey(product.id)) {
+      // if item exists in cart, decrease the quantity
+      _items.update(
+        product.id,
+            (existingCartItem) => existingCartItem.quantity > 1
+            ? CartItem(
+          product: existingCartItem.product,
+          quantity: existingCartItem.quantity - 1,
+        )
+            : throw Exception('Invalid operation. Quantity cannot be less than 1'),
+      );
+    }
+    notifyListeners();
   }
 }
