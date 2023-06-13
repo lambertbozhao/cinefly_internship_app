@@ -20,6 +20,12 @@ class _ProductListPageState extends State<ProductListPage> {
   /// A list to store products.
   List<Product> products = [];
 
+  /// Add a TextEditingController
+  final TextEditingController _filter = TextEditingController();
+
+  /// A filtered list of products
+  List<Product> filteredProducts = [];
+
   /// Initial state of the widget.
   /// I am using it to load the product data asynchronously.
   @override
@@ -42,6 +48,18 @@ class _ProductListPageState extends State<ProductListPage> {
     // Update the state with the new list of products.
     setState(() {
       products = productsJson.map((i) => Product.fromJson(i)).toList();
+      filteredProducts = products;
+    });
+  }
+
+  /// Create a method to filter your products.
+  /// Call this method every time the text in the search field changes.
+  void _filterProducts() {
+    String searchText = _filter.text.toLowerCase();
+    setState(() {
+      filteredProducts = products
+          .where((product) => product.name.toLowerCase().contains(searchText))
+          .toList();
     });
   }
 
@@ -53,12 +71,21 @@ class _ProductListPageState extends State<ProductListPage> {
     return Scaffold(
       // Application top bar.
       appBar: AppBar(
-        title: Text('Product List'),
+        title: TextField(
+          controller: _filter,
+          decoration: InputDecoration(
+              prefixIcon: Icon(Icons.search),
+              hintText: 'Search...'
+          ),
+          onChanged: (value) {
+            _filterProducts();
+          },
+        ),
       ),
       // Body of the scaffold which represents main content.
       body: ListView.builder(
         // The number of items to display.
-        itemCount: products.length,
+        itemCount: filteredProducts.length,
         // Provides a function to build each child in the list.
         itemBuilder: (context, index) {
           // Display a ListTile widget for each Product.
@@ -66,16 +93,16 @@ class _ProductListPageState extends State<ProductListPage> {
             // ------------------- BUG FIX START ------------------- //
             // -------------------   BOZHAO LI   ------------------- //
             // -------------------   13/06/2023  ------------------- //
-            leading: CustomNetworkImage(url: products[index].imageUrl),
+            leading: CustomNetworkImage(url: filteredProducts[index].imageUrl),
             // ------------------- BUG FIX E N D ------------------- //
-            title: Text(products[index].name),
-            subtitle: Text(products[index].description),
-            trailing: Text("\$${products[index].price.toStringAsFixed(2)}"),
+            title: Text(filteredProducts[index].name),
+            subtitle: Text(filteredProducts[index].description),
+            trailing: Text("\$${filteredProducts[index].price.toStringAsFixed(2)}"),
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProductDetailPage(product: products[index]),
+                  builder: (context) => ProductDetailPage(product: filteredProducts[index]),
                 ),
               );
             },
