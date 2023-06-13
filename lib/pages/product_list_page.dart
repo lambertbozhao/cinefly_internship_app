@@ -91,9 +91,14 @@ class _ProductListPageState extends State<ProductListPage> {
           // Display a ListTile widget for each Product.
           return ListTile(
             // ------------------- BUG FIX START ------------------- //
+            // -------------------   BUG_00001   ------------------- //
             // -------------------   BOZHAO LI   ------------------- //
             // -------------------   13/06/2023  ------------------- //
-            leading: CustomNetworkImage(url: filteredProducts[index].imageUrl),
+            leading:
+              Hero(
+                tag: 'product-image-${filteredProducts[index].id}',
+                child: CustomNetworkImage(url: filteredProducts[index].imageUrl),
+              ),
             // ------------------- BUG FIX E N D ------------------- //
             title: Text(filteredProducts[index].name),
             subtitle: Text(filteredProducts[index].description),

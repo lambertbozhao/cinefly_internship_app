@@ -33,9 +33,14 @@ class ProductDetailPage extends StatelessWidget {
           child: Column(
             children: <Widget>[
               // ------------------- BUG FIX START ------------------- //
+              // -------------------   BUG_00001   ------------------- //
               // -------------------   BOZHAO LI   ------------------- //
               // -------------------   13/06/2023  ------------------- //
-              CustomNetworkImage(url: product.imageUrl),
+              Hero(
+                tag: 'product-image-${product.id}',
+                child: CustomNetworkImage(url: product.imageUrl),
+              ),
+              // CustomNetworkImage(url: product.imageUrl),
               // ------------------- BUG FIX E N D ------------------- //
               SizedBox(height: 10.0),
               Text(

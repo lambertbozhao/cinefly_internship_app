@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cinefly_internship_app/services/providers/cart_provider.dart';
+import 'package:cinefly_internship_app/widgets/global/custom_network_image.dart';
 
 /// [ShoppingCartPage] is a widget that represents a shopping cart page.
 ///
@@ -30,7 +31,12 @@ class ShoppingCartPage extends StatelessWidget {
                 itemBuilder: (ctx, index) {
                   // For each item in the cart, display its image, name, quantity, and total price
                   return ListTile(
-                    leading: Image.network(cart.items.values.toList()[index].product.imageUrl),
+                    // ------------------- BUG FIX START ------------------- //
+                    // -------------------   BUG_00001   ------------------- //
+                    // -------------------   BOZHAO LI   ------------------- //
+                    // -------------------   13/06/2023  ------------------- //
+                    leading: CustomNetworkImage(url: cart.items.values.toList()[index].product.imageUrl),
+                    // ------------------- BUG FIX E N D ------------------- //
                     title: Text(cart.items.values.toList()[index].product.name),
                     subtitle: Text('Qty: ${cart.items.values.toList()[index].quantity.toString()}'),
                     trailing: Text("\$${(cart.items.values.toList()[index].product.price * cart.items.values.toList()[index].quantity).toStringAsFixed(2)}"),
