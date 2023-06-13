@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:cinefly_internship_app/pages/product_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cinefly_internship_app/services/models/product.dart';
+import 'package:cinefly_internship_app/widgets/global/custom_network_image.dart';
 
 /// A StatefulWidget that displays a list of products.
 /// The Widget rebuilds every time setState() gets called.
@@ -62,7 +63,11 @@ class _ProductListPageState extends State<ProductListPage> {
         itemBuilder: (context, index) {
           // Display a ListTile widget for each Product.
           return ListTile(
-            leading: Image.network(products[index].imageUrl),
+            // ------------------- BUG FIX START ------------------- //
+            // -------------------   BOZHAO LI   ------------------- //
+            // -------------------   13/06/2023  ------------------- //
+            leading: CustomNetworkImage(url: products[index].imageUrl),
+            // ------------------- BUG FIX E N D ------------------- //
             title: Text(products[index].name),
             subtitle: Text(products[index].description),
             trailing: Text("\$${products[index].price.toStringAsFixed(2)}"),

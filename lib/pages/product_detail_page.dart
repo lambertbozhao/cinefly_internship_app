@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cinefly_internship_app/services/providers/cart_provider.dart';
 import 'package:cinefly_internship_app/services/models/product.dart';
+import 'package:cinefly_internship_app/widgets/global/custom_network_image.dart';
 
 /// [ProductDetailPage] is a widget that displays detailed information about a product.
 ///
@@ -31,7 +32,11 @@ class ProductDetailPage extends StatelessWidget {
           padding: EdgeInsets.all(8.0),
           child: Column(
             children: <Widget>[
-              Image.network(product.imageUrl),
+              // ------------------- BUG FIX START ------------------- //
+              // -------------------   BOZHAO LI   ------------------- //
+              // -------------------   13/06/2023  ------------------- //
+              CustomNetworkImage(url: product.imageUrl),
+              // ------------------- BUG FIX E N D ------------------- //
               SizedBox(height: 10.0),
               Text(
                 product.name,
