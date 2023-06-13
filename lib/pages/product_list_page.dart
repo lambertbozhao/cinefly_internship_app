@@ -52,7 +52,7 @@ class _ProductListPageState extends State<ProductListPage> {
     });
   }
 
-  /// Create a method to filter your products.
+  /// Create a method to filter the products.
   /// Call this method every time the text in the search field changes.
   void _filterProducts() {
     String searchText = _filter.text.toLowerCase();
